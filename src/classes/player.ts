@@ -15,7 +15,7 @@ class Player {
         await this.ingestDice(diceNumber)
         const isComplete = this.checkComplete()
         if (isComplete) {
-        } else if (this.canPlayAnotherTurn(diceNumber)) {
+        } else if (await this.canPlayAnotherTurn(diceNumber)) {
             await this.playTurn()
         }
     }
@@ -25,7 +25,11 @@ class Player {
         }
         return false
     }
-    canPlayAnotherTurn(diceNumber: number) {
+    async canPlayAnotherTurn(diceNumber: number) {
+        const isKill = await this.game.checkKills(this)
+        if (isKill) {
+            return true
+        }
         // return true
         if (diceNumber === 6) {
             return true
@@ -195,6 +199,20 @@ class Pawn {
                 .attr('cy', y)
             await wait(300)
         }
+    }
+    async goHome() {
+        for (let i = this.cell; i > 1; i--) {
+            this.cell -= 1
+            const cellD3 = d3.select(`.cell[${this.color}Cell="${this.cell}"]`)
+            this.d3.transition().duration(100).ease(d3.easeLinear)
+                .attr('cx', parseInt(cellD3.attr('x')) + cellSize/2)
+                .attr('cy', parseInt(cellD3.attr('y')) + cellSize/2)
+            await wait(100)
+        }
+        this.d3.transition().duration(100).ease(d3.easeLinear)
+            .attr('cx', this.home.x)
+            .attr('cy', this.home.y)
+        await wait(100)
     }
     canMoveBy(count: number) {
         if (this.isHome()) {

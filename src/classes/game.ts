@@ -1,7 +1,8 @@
 import { gameLogic } from '../../constants/game'
-import { Player } from './player'
+import { Pawn, Player } from './player'
 import { resetDice } from '../setupDice'
 import { wait } from '../utils'
+import { cellsMap } from '..//setupBoard'
 
 class Game {
     turn: Player
@@ -17,6 +18,32 @@ class Game {
         document.getElementById('dice-container').setAttribute('player', player.name)
         this.askToPlayTurn()
     }
+    async checkKills(player: Player): Promise<Boolean> {
+        const players = Object.values(this.players)
+        let checkPawn: Pawn
+        let isKill = false
+        main_loop:
+            for (let i = 0; i < 4; i++) {
+                const checkPlayer = players[i]
+                if (checkPlayer.name === player.name) {
+                    continue
+                }
+                for (let tempCheckPawn of checkPlayer.pawns) {
+                    checkPawn = tempCheckPawn
+                    for (let pawn of player.pawns) {
+                        if ((!checkPawn.isHome() && !pawn.isHome()) &&
+                            (cellsMap[checkPlayer.name][checkPawn.cell] === cellsMap[player.name][pawn.cell])) {
+                            isKill = true
+                            break main_loop
+                        }
+                    }
+                }
+            }
+        if (isKill) {
+            await checkPawn.goHome()
+        }
+        return isKill
+    }
     async askToPlayTurn() {
         resetDice()
         await this.turn.playTurn()
@@ -25,6 +52,14 @@ class Game {
             0: gameLogic.players.indexOf(this.turn.name) + 1]
         this.setCurrentPlayer(this.players[nextColor])
     }
+    async test() {
+        setTimeout((async () => {
+            await this.players['green'].pawns[0].move(10)
+            await this.players['yellow'].pawns[0].move(20)
+            await this.players['yellow'].pawns[0].moveBy(3)
+            this.checkKills(this.players['yellow'])
+        }))
+    }
     constructor() {
         gameLogic.players.forEach(
             (color) => {
@@ -32,6 +67,7 @@ class Game {
                 this.players[player.name] = (player)
             }
         )
+        // this.test()
         this.setCurrentPlayer(this.players['green'])
     }
 }

@@ -6,6 +6,7 @@ const homeSize = (boardSize * 2) / 5;
 const gullySize = (boardSize * 1) / 5;
 const cellSize = gullySize/3
 const homes = []
+const cellsMap = {}
 const setupBoard = () => {
     const svg = d3
         .select("game")
@@ -64,7 +65,6 @@ const stylizeHomes = (svg) => {
     homes.forEach(function (home) {
         const homeX = parseInt(home.attr('x'))
         const homeY = parseInt(home.attr('y'))
-        console.log(homeX, homeY)
         svg.append('rect')
         .attr("class", "home-base")
         .attr("x", homeX + homeSize/5)
@@ -281,12 +281,14 @@ const drawFinalStretches = (svg) => {
 const updateCellsByPlayer = () => {
     gameLogic.players.forEach(
         player => {
+            cellsMap[player] = {}
             let playerTrack = gameLogic.startCell[player]
             let cellCount = 1
             for (let count = 0; count < 51; count++) {
                 if (playerTrack > 52) {
                     playerTrack = 1;
                 }
+                cellsMap[player][cellCount] = playerTrack
                 d3.select(`.cell.gully[cell="${playerTrack++}"]`).attr(`${player}Cell`, cellCount++)
             }
             for (let count = 1; count <= 5; count++) {
@@ -304,4 +306,4 @@ const drawSafeCells = () => {
     )
 }
 
-export { setupBoard, homeSize, gullySize, cellSize };
+export { setupBoard, homeSize, gullySize, cellSize, cellsMap };
