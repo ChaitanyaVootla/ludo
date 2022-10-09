@@ -28,7 +28,7 @@ class Game {
     constructor() {
         gameLogic.players.forEach(
             (color) => {
-                const player: Player = new Player(color)
+                const player: Player = new Player(color, this)
                 this.players[player.name] = (player)
             }
         )

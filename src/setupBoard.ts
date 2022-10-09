@@ -5,6 +5,7 @@ const boardSize = 600;
 const homeSize = (boardSize * 2) / 5;
 const gullySize = (boardSize * 1) / 5;
 const cellSize = gullySize/3
+const homes = []
 const setupBoard = () => {
     const svg = d3
         .select("game")
@@ -13,48 +14,65 @@ const setupBoard = () => {
         .attr("width", boardSize)
         .attr("height", boardSize);
     drawHomes(svg)
+    stylizeHomes(svg)
     drawFinish(svg)
     drawGullies(svg)
     drawFinalStretches(svg)
+    drawSafeCells()
     updateCellsByPlayer()
 };
 
 const drawHomes = (svg) => {
-    svg
+    homes.push(svg
       .append("rect")
       .attr("class", 'home')
       .attr("player", 'green')
       .attr("x", 0)
       .attr("y", 0)
       .attr("width", homeSize)
-      .attr("height", homeSize);
+      .attr("height", homeSize));
 
-    svg
+    homes.push(svg
       .append("rect")
       .attr("class", 'home')
       .attr("player", 'red')
       .attr("x", homeSize + gullySize)
       .attr("y", 0)
       .attr("width", homeSize)
-      .attr("height", homeSize);
+      .attr("height", homeSize));
 
-    svg
+    homes.push(svg
       .append("rect")
       .attr("class", 'home')
       .attr("player", 'yellow')
       .attr("x", 0)
       .attr("y",  boardSize - homeSize)
       .attr("width", homeSize)
-      .attr("height", homeSize);
+      .attr("height", homeSize));
 
-    svg
+    homes.push(svg
       .append("rect")
       .attr("class", 'home')
       .attr("player", 'blue')
       .attr("x", homeSize + gullySize)
       .attr("y", boardSize - homeSize)
       .attr("width", homeSize)
-      .attr("height", homeSize);
+      .attr("height", homeSize));
+}
+
+const stylizeHomes = (svg) => {
+    homes.forEach(function (home) {
+        const homeX = parseInt(home.attr('x'))
+        const homeY = parseInt(home.attr('y'))
+        console.log(homeX, homeY)
+        svg.append('rect')
+        .attr("class", "home-base")
+        .attr("x", homeX + homeSize/5)
+        .attr("y", homeY + homeSize/5)
+        .attr("rx",'10px')
+        .attr('height', homeSize*3/5)
+        .attr('width', homeSize*3/5)
+    })
 }
 
 const drawFinish = (svg) => {
@@ -274,6 +292,14 @@ const updateCellsByPlayer = () => {
             for (let count = 1; count <= 5; count++) {
                 d3.select(`.cell.finish.${player}[cell="${count}"]`).attr(`${player}Cell`, cellCount++)
             }
+        }
+    )
+}
+
+const drawSafeCells = () => {
+    gameLogic.safeCells.forEach(
+        cell => {
+            d3.select(`.gully.cell[cell="${cell}"]`).attr('safe', 'true')
         }
     )
 }

@@ -3,22 +3,33 @@ import { gameLogic } from '../../constants/game'
 import { gullySize, homeSize, cellSize } from '../setupBoard'
 import { rollDice } from '../setupDice'
 import { wait } from '../utils'
+import { Game } from './game'
 
 class Player {
     name: string
     pawns: Pawn[]
+    game: Game
+    pawnSelectionPromise: Promise<any>
     async playTurn() {
         const diceNumber = await this.waitForDiceRoll()
         await this.ingestDice(diceNumber)
-        if (this.canPlayAnotherTurn(diceNumber)) {
+        const isComplete = this.checkComplete()
+        if (isComplete) {
+        } else if (this.canPlayAnotherTurn(diceNumber)) {
             await this.playTurn()
         }
     }
-    canPlayAnotherTurn(diceNumber: number) {
-        return true
-        if (diceNumber === 6) {
+    checkComplete() {
+        if (this.pawns.filter(pawn => pawn.hasWon).length === 4) {
             return true
         }
+        return false
+    }
+    canPlayAnotherTurn(diceNumber: number) {
+        // return true
+        if (diceNumber === 6) {
+            return true
+        } 
     }
     async waitForDiceRoll(): Promise<number> {
         let diceResolve
@@ -31,25 +42,45 @@ class Player {
         }
         return dicePromise
     }
-    async waitForPawnSelection(): Promise<any> {
-
+    async waitForPawnSelection(pawns?: Pawn[]): Promise<Pawn> {
+        const affectedPawns: Pawn[] = (pawns || this.pawns)
+        affectedPawns.forEach(pawn => pawn.d3.attr('highlight', 'true'))
+        const pawn = await Promise.any(affectedPawns.map((pawn: Pawn) => pawn.onClick()))
+        affectedPawns.forEach(pawn => pawn.d3.attr('highlight', null))
+        return pawn
     }
     async ingestDice(diceNumber: number) {
         const pawnsHome = this.pawnsAtHome()
-        if (pawnsHome.length === 4 && diceNumber === 6) {
-            await this.pawns[0].move(1)
-        } else if (diceNumber === 6) {
-
-        } else if (pawnsHome.length < 4) {
-            await this.pawns[0].moveBy(diceNumber)
+        if (diceNumber === 6) {
+            if (pawnsHome.length === 4) {
+                await this.pawns[0].move(1)
+            } else {
+                const pawn: Pawn = await this.waitForPawnSelection()
+                if (pawn.isHome()) {
+                    await pawn.move(1)
+                } else {
+                    await pawn.moveBy(diceNumber)
+                }
+            }
+        } else {
+            if (this.movablePawns(diceNumber).length > 1) {
+                const pawn: Pawn = await this.waitForPawnSelection(this.movablePawns(diceNumber))
+                await pawn.moveBy(diceNumber)
+            } else if (this.movablePawns(diceNumber).length === 1) {
+                await this.movablePawns(diceNumber)[0].moveBy(diceNumber)
+            }
         }
     }
-    pawnsAtHome() {
+    pawnsAtHome(): Pawn[] {
         return this.pawns.filter(pawn => pawn.isHome())
     }
-    constructor(name: string) {
+    movablePawns(count: number): Pawn[] {
+        return this.pawns.filter(pawn => pawn.canMoveBy(count))
+    }
+    constructor(name: string, game: Game) {
         this.name = name
-        let homeX, homeY;
+        this.game = game
+        let homeX, homeY
         switch(name) {
             case 'green': {
                 homeX = 0
@@ -100,7 +131,7 @@ class Player {
             const d3Handler = d3.select('svg,.board')
                 .append('circle')
                 .attr('class', `player ${name} ${count}`)
-                .attr('r', 12)
+                .attr('r', cellSize/3)
                 .attr('cx', x)
                 .attr('cy', y)
             const pawn = new Pawn({
@@ -165,8 +196,17 @@ class Pawn {
             await wait(300)
         }
     }
-    onClick() {
-        console.log(`${this.color} ${this.count} clicked`)
+    canMoveBy(count: number) {
+        if (this.isHome()) {
+            return false
+        }
+        return this.cell + count <= this.end
+    }
+    async onClick(): Promise<Pawn> {
+        let clickResolve: any
+        const clickPromise = new Promise((resolve) => clickResolve = resolve) as Promise<Pawn>
+        this.d3.on('click', () => clickResolve(this))
+        return clickPromise;
     }
     isHome() {
         return this.cell < 0
@@ -177,7 +217,6 @@ class Pawn {
         this.end = 57
         this.d3 = d3
         this.player = player
-        this.d3.on('click', this.onClick.bind(this))
         this.home = home
         this.cell = -1
     }
