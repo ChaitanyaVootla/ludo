@@ -1,0 +1,199 @@
+$borderColor: rgb(34, 34, 34);
+$diceSize: 80px;
+
+game {
+    display: flex;
+    justify-content: center;
+    .board {
+        background-color: white;
+        border-radius: 5px;
+        border: 2px solid $borderColor;
+        .home {
+            fill: white;
+            stroke: $borderColor;
+            stroke-width: 2px;
+            &[player="green"] {
+                fill: green;
+            }
+            &[player="red"] {
+                fill: red;
+            }
+            &[player="yellow"] {
+                fill: yellow;
+            }
+            &[player="blue"] {
+                fill: blue;
+            }
+        }
+        .finish {
+            stroke: $borderColor;
+            stroke-width: 1px;
+            &.green {
+                fill: green;
+            }
+            &.red {
+                fill: red;
+            }
+            &.blue {
+                fill: blue;
+            }
+            &.yellow {
+                fill: yellow;
+            }
+        }
+        .cell {
+            fill: white;
+            stroke: $borderColor;
+            stroke-width: 1px;
+            &.green.finish {
+                fill: green;
+            }
+            &.red.finish {
+                fill: red;
+            }
+            &.yellow.finish {
+                fill: yellow;
+            }
+            &.blue.finish {
+                fill: blue;
+            }
+            &[cell="2"] {
+                fill: green;
+            }
+            &[cell="15"] {
+                fill: red;
+            }
+            &[cell="28"] {
+                fill: blue;
+            }
+            &[cell="41"] {
+                fill: yellow;
+            }
+        }
+        .player {
+            stroke: $borderColor;
+            stroke-width: 5px;
+            stroke-dasharray: 10,2;
+            stroke-linejoin: round;
+            cursor: pointer;
+            &.green {
+                fill: green;
+            }
+            &.red {
+                fill: red;
+            }
+            &.yellow {
+                fill: yellow;
+            }
+            &.blue {
+                fill: blue;
+            }
+            &:hover {
+                filter: grayscale(100%);
+            }
+        }
+    }
+}
+
+dice {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    #dice-container[active="false"] {
+        pointer-events: none;
+        .dice {
+            background-color: grey;
+        }
+    }
+    .dice-container {
+        &[player="green"] {
+            .dice {
+                background-color: green;
+            }
+        }
+        &[player="red"] {
+            .dice {
+                background-color: red;
+            }
+        }
+        &[player="yellow"] {
+            .dice {
+                background-color: yellow;
+                color: black;
+            }
+        }
+        &[player="blue"] {
+            .dice {
+                background-color: blue;
+            }
+        }
+        .dice {
+            cursor: pointer;
+            padding: 1rem;
+            width: $diceSize;
+            height: $diceSize;
+            border-radius: 10%;
+            border: 2px solid $borderColor;
+        }
+        .face1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .face0 {
+            color: white;
+            display: flex;
+            font-size: 1.3rem;
+            justify-content: center;
+            align-items: center;
+        }
+        .dot{
+            display: block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color:white;
+            border: 2px solid $borderColor;
+        }
+        .face2{
+            display: flex ;
+            justify-content: space-between;
+        }
+        .face2 .dot:nth-of-type(2) {
+            align-self: flex-end;
+        }
+        .face3 {
+            display: flex;
+            justify-content: space-between;
+        }
+        .face3 .dot:nth-of-type(1) {
+            align-self :flex-end;
+        }
+        .face3 .dot:nth-of-type(2) {
+            align-self :center;
+        }
+        .face4 , .face6, .face5{
+            display: flex;
+            justify-content: space-between;
+        }
+        .face4 .column , .face6 .column, .face5 .column{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .face5 .column:nth-of-type(2) {
+            justify-content: center;
+        }
+    }
+}
+
+#current-player {
+    font-size: 2rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: whitesmoke;
+}
