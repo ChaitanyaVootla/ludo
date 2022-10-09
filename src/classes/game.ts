@@ -32,6 +32,8 @@ class Game {
                     checkPawn = tempCheckPawn
                     for (let pawn of player.pawns) {
                         if ((!checkPawn.isHome() && !pawn.isHome()) &&
+                            (!gameLogic.safeCells.includes(cellsMap[checkPlayer.name][checkPawn.cell])) &&
+                            (!gameLogic.safeCells.includes(cellsMap[player.name][pawn.cell])) &&
                             (cellsMap[checkPlayer.name][checkPawn.cell] === cellsMap[player.name][pawn.cell])) {
                             isKill = true
                             break main_loop
@@ -54,8 +56,8 @@ class Game {
     }
     async test() {
         setTimeout((async () => {
-            await this.players['green'].pawns[0].move(10)
-            await this.players['yellow'].pawns[0].move(20)
+            await this.players['green'].pawns[0].move(9)
+            await this.players['yellow'].pawns[0].move(19)
             await this.players['yellow'].pawns[0].moveBy(3)
             this.checkKills(this.players['yellow'])
         }))
