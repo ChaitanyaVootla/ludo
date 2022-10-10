@@ -73,7 +73,7 @@ class Game {
                 this.players[player.name] = (player)
             }
         )
-        this.test()
+        // this.test()
         this.setCurrentPlayer(this.players['green'])
     }
 }

@@ -175,25 +175,27 @@ class Pawn {
         if (gameLogic.safeCells.includes(cellsMap[this.color][this.cell])) {
             const pawnX = Number(this.d3.attr('cx'))
             const pawnY = Number(this.d3.attr('cy'))
+            const padding = cellSize/4
+            const shrunkSize = cellSize/4
             switch (this.color) {
                 case 'green': {
-                    this.d3.attr('r', cellSize/5).attr('cx', pawnX - cellSize/4)
-                    this.d3.attr('r', cellSize/5).attr('cy', pawnY - cellSize/4)
+                    this.d3.attr('r', shrunkSize).attr('cx', pawnX - padding)
+                    this.d3.attr('r', shrunkSize).attr('cy', pawnY - padding)
                     break
                 }
                 case 'red': {
-                    this.d3.attr('r', cellSize/5).attr('cx', pawnX + cellSize/4)
-                    this.d3.attr('r', cellSize/5).attr('cy', pawnY - cellSize/4)
+                    this.d3.attr('r', shrunkSize).attr('cx', pawnX + padding)
+                    this.d3.attr('r', shrunkSize).attr('cy', pawnY - padding)
                     break
                 }
                 case 'blue': {
-                    this.d3.attr('r', cellSize/5).attr('cx', pawnX + cellSize/4)
-                    this.d3.attr('r', cellSize/5).attr('cy', pawnY + cellSize/4)
+                    this.d3.attr('r', shrunkSize).attr('cx', pawnX + padding)
+                    this.d3.attr('r', shrunkSize).attr('cy', pawnY + padding)
                     break
                 }
                 case 'yellow': {
-                    this.d3.attr('r', cellSize/5).attr('cx', pawnX - cellSize/4)
-                    this.d3.attr('r', cellSize/5).attr('cy', pawnY + cellSize/4)
+                    this.d3.attr('r', shrunkSize).attr('cx', pawnX - padding)
+                    this.d3.attr('r', shrunkSize).attr('cy', pawnY + padding)
                     break
                 }
             }
