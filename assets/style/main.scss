@@ -55,6 +55,9 @@ game {
             fill: white;
             stroke: $borderColor;
             stroke-width: 1px;
+            &[safe="true"] {
+                fill: rgb(186, 186, 186);
+            }
             &.green.finish {
                 fill: $green;
             }
@@ -78,9 +81,6 @@ game {
             }
             &[cell="41"] {
                 fill: $yellow;
-            }
-            &[safe="true"] {
-                fill: rgb(186, 186, 186);
             }
         }
         .player {

@@ -56,9 +56,13 @@ class Game {
     }
     async test() {
         setTimeout((async () => {
-            await this.players['green'].pawns[0].move(9)
-            await this.players['yellow'].pawns[0].move(19)
-            await this.players['yellow'].pawns[0].moveBy(3)
+            await this.players['green'].pawns[0].move(1)
+            await this.players['red'].pawns[0].move(40)
+            await this.players['blue'].pawns[0].move(27)
+            await this.players['yellow'].pawns[0].move(14)
+            // await this.players['green'].pawns[0].move(1)
+            // await this.players['yellow'].pawns[0].move(11)
+            // await this.players['yellow'].pawns[0].moveBy(3)
             this.checkKills(this.players['yellow'])
         }))
     }
@@ -69,7 +73,7 @@ class Game {
                 this.players[player.name] = (player)
             }
         )
-        // this.test()
+        this.test()
         this.setCurrentPlayer(this.players['green'])
     }
 }

@@ -18,7 +18,7 @@ const gameLogic = {
         'yellow',
     ],
     safeCells: [
-        10, 49, 23, 36,
+        10, 49, 23, 36, 41, 2, 15, 28,
     ]
 }
 

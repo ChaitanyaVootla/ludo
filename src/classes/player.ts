@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 import { gameLogic } from '../../constants/game'
-import { gullySize, homeSize, cellSize } from '../setupBoard'
+import { gullySize, homeSize, cellSize, cellsMap } from '../setupBoard'
 import { rollDice } from '../setupDice'
 import { wait } from '../utils'
 import { Game } from './game'
@@ -84,7 +84,7 @@ class Player {
     constructor(name: string, game: Game) {
         this.name = name
         this.game = game
-        let homeX, homeY
+        let homeX: number, homeY: number
         switch(name) {
             case 'green': {
                 homeX = 0
@@ -169,6 +169,40 @@ class Pawn {
             .attr('cx', parseInt(cellD3.attr('x')) + cellSize/2)
             .attr('cy', parseInt(cellD3.attr('y')) + cellSize/2)
         await wait(300)
+        this.checkSafe()
+    }
+    checkSafe() {
+        if (gameLogic.safeCells.includes(cellsMap[this.color][this.cell])) {
+            const pawnX = Number(this.d3.attr('cx'))
+            const pawnY = Number(this.d3.attr('cy'))
+            switch (this.color) {
+                case 'green': {
+                    this.d3.attr('r', cellSize/5).attr('cx', pawnX - cellSize/4)
+                    this.d3.attr('r', cellSize/5).attr('cy', pawnY - cellSize/4)
+                    break
+                }
+                case 'red': {
+                    this.d3.attr('r', cellSize/5).attr('cx', pawnX + cellSize/4)
+                    this.d3.attr('r', cellSize/5).attr('cy', pawnY - cellSize/4)
+                    break
+                }
+                case 'blue': {
+                    this.d3.attr('r', cellSize/5).attr('cx', pawnX + cellSize/4)
+                    this.d3.attr('r', cellSize/5).attr('cy', pawnY + cellSize/4)
+                    break
+                }
+                case 'yellow': {
+                    this.d3.attr('r', cellSize/5).attr('cx', pawnX - cellSize/4)
+                    this.d3.attr('r', cellSize/5).attr('cy', pawnY + cellSize/4)
+                    break
+                }
+            }
+        } else {
+            const cellD3 = d3.select(`.cell[${this.color}Cell="${this.cell}"]`)
+            this.d3.attr('cx', parseInt(cellD3.attr('x')) + cellSize/2)
+                .attr('cy', parseInt(cellD3.attr('y')) + cellSize/2)
+                .attr('r', cellSize/3)
+        }
     }
     async moveBy(count: number) {
         if (this.cell + count < this.end) {
@@ -199,6 +233,7 @@ class Pawn {
                 .attr('cy', y)
             await wait(300)
         }
+        this.checkSafe()
     }
     async goHome() {
         for (let i = this.cell; i > 1; i--) {
@@ -209,6 +244,7 @@ class Pawn {
                 .attr('cy', parseInt(cellD3.attr('y')) + cellSize/2)
             await wait(100)
         }
+        this.cell = -1
         this.d3.transition().duration(100).ease(d3.easeLinear)
             .attr('cx', this.home.x)
             .attr('cy', this.home.y)
