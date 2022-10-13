@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 import { gameLogic } from '../../constants/game'
 import { gullySize, homeSize, cellSize, cellsMap } from '../setupBoard'
-import { rollDice } from '../setupDice'
+import { resetDice, rollDice } from '../setupDice'
 import { wait } from '../utils'
 import { Game } from './game'
 
@@ -9,6 +9,7 @@ class Player {
     name: string
     pawns: Pawn[]
     game: Game
+    kills = 0
     pawnSelectionPromise: Promise<any>
     async playTurn() {
         const diceNumber = await this.waitForDiceRoll()
@@ -16,6 +17,7 @@ class Player {
         const isComplete = this.checkComplete()
         if (isComplete) {
         } else if (await this.canPlayAnotherTurn(diceNumber)) {
+            resetDice()
             await this.playTurn()
         }
     }
@@ -59,7 +61,7 @@ class Player {
             if (pawnsHome.length === 4) {
                 await this.pawns[0].move(1)
             } else {
-                const pawn: Pawn = await this.waitForPawnSelection()
+                const pawn: Pawn = await this.waitForPawnSelection(this.movablePawns(diceNumber))
                 if (pawn.isHome()) {
                     await pawn.move(1)
                 } else {
@@ -68,8 +70,12 @@ class Player {
             }
         } else {
             if (this.movablePawns(diceNumber).length > 1) {
-                const pawn: Pawn = await this.waitForPawnSelection(this.movablePawns(diceNumber))
-                await pawn.moveBy(diceNumber)
+                if (this.arePawnsSameCell(this.movablePawns(diceNumber))) {
+                    await this.movablePawns(diceNumber)[0].moveBy(diceNumber)
+                } else {
+                    const pawn: Pawn = await this.waitForPawnSelection(this.movablePawns(diceNumber))
+                    await pawn.moveBy(diceNumber)
+                }
             } else if (this.movablePawns(diceNumber).length === 1) {
                 await this.movablePawns(diceNumber)[0].moveBy(diceNumber)
             }
@@ -80,6 +86,9 @@ class Player {
     }
     movablePawns(count: number): Pawn[] {
         return this.pawns.filter(pawn => pawn.canMoveBy(count))
+    }
+    arePawnsSameCell(pawns: Pawn[]): Boolean {
+        return new Set(pawns.map(pawn => pawn.cell)).size === 1
     }
     constructor(name: string, game: Game) {
         this.name = name
@@ -252,11 +261,14 @@ class Pawn {
             .attr('cy', this.home.y)
         await wait(100)
     }
-    canMoveBy(count: number) {
+    canMoveBy(diceNumber: number) {
         if (this.isHome()) {
+            if (diceNumber === 6) {
+                return true
+            }
             return false
         }
-        return this.cell + count <= this.end
+        return this.cell + diceNumber <= this.end
     }
     async onClick(): Promise<Pawn> {
         let clickResolve: any

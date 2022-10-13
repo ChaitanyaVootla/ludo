@@ -6,6 +6,86 @@ $blue: rgb(62, 62, 254);
 $yellow: rgb(255, 255, 66);
 $red: rgb(253, 72, 72);
 
+img.kill {
+    height: 40px;
+    width: 40px;
+}
+
+div.kill {
+    // mask: url(images/skull.svg) no-repeat center;
+    background-image: url(images/skull.svg);
+    object-fit: contain;
+    height: 40px;
+    width: 40px;
+    position: relative;
+    svg {
+        position: absolute;
+    }
+    &.green {
+        svg {
+            #skull {
+                fill: $green !important;
+            }
+        }
+    }
+    &.blue {
+        svg {
+            #skull {
+                fill: $blue !important;
+            }
+        }
+    }
+    &.yellow {
+        svg {
+            #skull {
+                fill: $yellow !important;
+            }
+        }
+    }
+    &.red {
+        svg {
+            #skull {
+                fill: $red !important;
+            }
+        }
+    }
+}
+
+.game-surface {
+    display: flex;
+    justify-content: center;
+    .side-surface {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 2rem;
+        .player-surface {
+            width: 100px;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            span {
+                // line-height: 3rem;
+                font-size: 2rem;
+            }
+        }
+        .green-surface {
+        }
+        .yellow-surface {
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+        }
+        .red-surface {
+        }
+        .blue-surface {
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+        }
+    }
+}
+
 game {
     display: flex;
     justify-content: center;
@@ -56,7 +136,7 @@ game {
             stroke: $borderColor;
             stroke-width: 1px;
             &[safe="true"] {
-                fill: rgb(186, 186, 186);
+                fill: rgb(205, 205, 205);
             }
             &.green.finish {
                 fill: $green;
@@ -117,7 +197,7 @@ dice {
     #dice-container[active="false"] {
         pointer-events: none;
         .dice {
-            border: 5px solid grey;
+            border: 2px solid grey;
         }
     }
     .dice-container {
@@ -157,6 +237,7 @@ dice {
         }
         .face0 {
             color: white;
+            font-weight: 600;
             display: flex;
             font-size: 1.3rem;
             justify-content: center;
@@ -210,7 +291,7 @@ dice {
 
 body {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    background-color: whitesmoke;
+    background-color: #fffbf7;
     margin: 0;
 }
 
@@ -222,12 +303,15 @@ body {
 @keyframes flicker {
     0% {
         stroke: black;
+        filter: grayscale(100);
     }
     50% {
         stroke: white;
+        filter: grayscale(0);
     }
     100% {
         stroke: black;
+        filter: grayscale(100);
     }
 }
 
@@ -240,5 +324,42 @@ body {
     }
     100% {
         transform: scale(1);
+    }
+}
+
+.title-container {
+    display: flex;
+    justify-content: center;
+    h1.title {
+        margin: 0;
+        margin-top: 1rem;
+        display: grid;
+        grid-template-columns: auto auto;
+        width: 6rem;
+        height: 6rem;
+        padding: 0.5rem;
+        background-color: #ffe8ca;
+        border: 3px solid #ffb85a;
+        border-radius: 5px;
+        div {
+            line-height: 3rem;
+            // text-decoration: line-through overline;
+            -webkit-text-stroke: $borderColor;
+            -webkit-text-stroke-width: 1px;
+            text-align: center;
+            font-size: 3rem;
+            &.l {
+                color: $green;
+            }
+            &.u {
+                color: $red;
+            }
+            &.d {
+                color: $yellow;
+            }
+            &.o {
+                color: $blue;
+            }
+        }
     }
 }

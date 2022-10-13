@@ -1,4 +1,3 @@
-import { Game } from './classes/game'
 import { diceFaces } from './dice/constants'
 
 const dice = document.getElementById('dice-container') as HTMLElement
@@ -7,9 +6,6 @@ const rollDice = (): number => {
     dice.innerHTML = ''
     const randomNumber = Math.floor(6*Math.random())+1
     dice.insertAdjacentHTML('beforeend', diceFaces[randomNumber])
-    // if (!ignore) {
-    //     game.diceRolled(randomNumber)
-    // }
     return randomNumber
 }
 

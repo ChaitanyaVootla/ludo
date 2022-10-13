@@ -6,7 +6,33 @@
     <title>Ludo</title>
   </head>
   <body>
-    <game></game>
+    <div class="title-container">
+      <h1 class="title">
+        <div class="l">L</div>
+        <div class="u">U</div>
+        <div class="d">D</div>
+        <div class="o">O</div>
+      </h1>
+    </div>
+    <div class="game-surface">
+      <div class="side-surface left-surface">
+        <div class="player-surface green-surface">
+          <div id="green-kills"></div>
+        </div>
+        <div class="player-surface yellow-surface">
+          <div id="yellow-kills"></div>
+        </div>
+      </div>
+      <game></game>
+      <div class="side-surface right-surface">
+        <div class="player-surface red-surface">
+          <div id="red-kills"></div>
+        </div>
+        <div class="player-surface blue-surface">
+          <div id="blue-kills"></div>
+        </div>
+      </div>
+    </div>
     <dice>
       <div class="dice-container" id="dice-container">
       </div>
