@@ -48,6 +48,12 @@ class Game {
             player.kills += 1
             document.getElementById(`${player.name}-kills`).insertAdjacentHTML('beforeend',
                 `<div class="kill ${checkPawn.color}">${skull}</div>`)
+            document.getElementById(`${player.name}-kills`).insertAdjacentHTML('beforeend',
+                `<div class="kill ${checkPawn.color}">${skull}</div>`)
+            document.getElementById(`${player.name}-kills`).insertAdjacentHTML('beforeend',
+                `<div class="kill ${checkPawn.color}">${skull}</div>`)
+            document.getElementById(`${player.name}-kills`).insertAdjacentHTML('beforeend',
+                `<div class="kill ${checkPawn.color}">${skull}</div>`)
             await checkPawn.goHome()
         }
         return isKill
@@ -86,10 +92,15 @@ class Game {
             await this.players['green'].pawns[3].moveBy(3)
             this.checkKills(this.players['green'])
 
-            await this.players['yellow'].pawns[1].move(28)
-            await this.players['green'].pawns[2].move(12)
-            await this.players['green'].pawns[2].moveBy(3)
-            this.checkKills(this.players['green'])
+            // await this.players['yellow'].pawns[1].move(28)
+            // await this.players['green'].pawns[2].move(12)
+            // await this.players['green'].pawns[2].moveBy(3)
+            // this.checkKills(this.players['green'])
+
+            // await this.players['blue'].pawns[1].move(41)
+            // await this.players['green'].pawns[1].move(12)
+            // await this.players['green'].pawns[1].moveBy(3)
+            // this.checkKills(this.players['green'])
         }))
     }
     constructor() {
@@ -99,7 +110,7 @@ class Game {
                 this.players[player.name] = (player)
             }
         )
-        // this.test()
+        this.test()
         this.setCurrentPlayer(this.players['green'])
     }
 }
