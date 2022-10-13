@@ -66,24 +66,29 @@ class Game {
             // await this.players['red'].pawns[0].move(40)
             // await this.players['blue'].pawns[0].move(27)
             // await this.players['yellow'].pawns[0].move(14)
-            await this.players['green'].pawns[0].move(2)
-            await this.players['yellow'].pawns[0].move(12)
-            await this.players['yellow'].pawns[0].moveBy(3)
-            await this.checkKills(this.players['yellow'])
+            // await this.players['green'].pawns[0].move(2)
+            // await this.players['yellow'].pawns[0].move(12)
+            // await this.players['yellow'].pawns[0].moveBy(3)
+            // await this.checkKills(this.players['yellow'])
 
-            await this.players['yellow'].pawns[1].move(2)
-            await this.players['blue'].pawns[1].move(12)
-            await this.players['blue'].pawns[1].moveBy(3)
-            this.checkKills(this.players['blue'])
+            // await this.players['yellow'].pawns[1].move(2)
+            // await this.players['blue'].pawns[1].move(12)
+            // await this.players['blue'].pawns[1].moveBy(3)
+            // this.checkKills(this.players['blue'])
 
-            await this.players['blue'].pawns[2].move(2)
-            await this.players['red'].pawns[2].move(12)
-            await this.players['red'].pawns[2].moveBy(3)
-            this.checkKills(this.players['red'])
+            // await this.players['blue'].pawns[2].move(2)
+            // await this.players['red'].pawns[2].move(12)
+            // await this.players['red'].pawns[2].moveBy(3)
+            // this.checkKills(this.players['red'])
 
             await this.players['red'].pawns[3].move(2)
             await this.players['green'].pawns[3].move(12)
             await this.players['green'].pawns[3].moveBy(3)
+            this.checkKills(this.players['green'])
+
+            await this.players['yellow'].pawns[1].move(28)
+            await this.players['green'].pawns[2].move(12)
+            await this.players['green'].pawns[2].moveBy(3)
             this.checkKills(this.players['green'])
         }))
     }
@@ -94,7 +99,7 @@ class Game {
                 this.players[player.name] = (player)
             }
         )
-        this.test()
+        // this.test()
         this.setCurrentPlayer(this.players['green'])
     }
 }

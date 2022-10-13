@@ -68,6 +68,11 @@ div.kill {
                 // line-height: 3rem;
                 font-size: 2rem;
             }
+            .kills-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px
+            }
         }
         .green-surface {
         }
