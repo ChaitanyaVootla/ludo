@@ -32,9 +32,13 @@ class Game {
                 for (let tempCheckPawn of checkPlayer.pawns) {
                     checkPawn = tempCheckPawn
                     for (let pawn of player.pawns) {
+                        console.log(player, pawn)
+                        console.log(cellsMap[checkPlayer.name][checkPawn.cell], cellsMap[player.name][pawn.cell])
                         if ((!checkPawn.isHome() && !pawn.isHome()) &&
                             (!gameLogic.safeCells.includes(cellsMap[checkPlayer.name][checkPawn.cell])) &&
                             (!gameLogic.safeCells.includes(cellsMap[player.name][pawn.cell])) &&
+                            !isNaN(cellsMap[checkPlayer.name][checkPawn.cell]) &&
+                            !isNaN(cellsMap[player.name][pawn.cell]) &&
                             (cellsMap[checkPlayer.name][checkPawn.cell] === cellsMap[player.name][pawn.cell])) {
                                 console.log(`killer ${player.name} pawn no: ${pawn.count} at ${pawn.cell}, original: ${cellsMap[player.name][pawn.cell]}`)
                                 console.log(`killed ${checkPlayer.name} pawn no: ${checkPawn.count} at ${checkPawn.cell}, original: ${cellsMap[checkPlayer.name][checkPawn.cell]}`)
@@ -46,12 +50,6 @@ class Game {
             }
         if (isKill) {
             player.kills += 1
-            document.getElementById(`${player.name}-kills`).insertAdjacentHTML('beforeend',
-                `<div class="kill ${checkPawn.color}">${skull}</div>`)
-            document.getElementById(`${player.name}-kills`).insertAdjacentHTML('beforeend',
-                `<div class="kill ${checkPawn.color}">${skull}</div>`)
-            document.getElementById(`${player.name}-kills`).insertAdjacentHTML('beforeend',
-                `<div class="kill ${checkPawn.color}">${skull}</div>`)
             document.getElementById(`${player.name}-kills`).insertAdjacentHTML('beforeend',
                 `<div class="kill ${checkPawn.color}">${skull}</div>`)
             await checkPawn.goHome()
@@ -87,10 +85,10 @@ class Game {
             // await this.players['red'].pawns[2].moveBy(3)
             // this.checkKills(this.players['red'])
 
-            await this.players['red'].pawns[3].move(2)
-            await this.players['green'].pawns[3].move(12)
-            await this.players['green'].pawns[3].moveBy(3)
-            this.checkKills(this.players['green'])
+            // await this.players['red'].pawns[3].move(2)
+            // await this.players['green'].pawns[3].move(12)
+            // await this.players['green'].pawns[3].moveBy(3)
+            // this.checkKills(this.players['green'])
 
             // await this.players['yellow'].pawns[1].move(28)
             // await this.players['green'].pawns[2].move(12)
@@ -101,6 +99,9 @@ class Game {
             // await this.players['green'].pawns[1].move(12)
             // await this.players['green'].pawns[1].moveBy(3)
             // this.checkKills(this.players['green'])
+
+            // await this.players['green'].pawns[3].move(56)
+            // await this.players['green'].pawns[3].moveBy(1)
         }))
     }
     constructor() {

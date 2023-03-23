@@ -225,6 +225,7 @@ class Pawn {
                     .attr('cy', parseInt(cellD3.attr('y')) + cellSize/2)
                 await wait(300)
             }
+            this.checkSafe()
         } else if (this.cell + count === this.end) {
             this.hasWon = true
             const finishD3 = d3.select(`polygon.finish.${this.color}`)
@@ -244,7 +245,6 @@ class Pawn {
                 .attr('cy', y)
             await wait(300)
         }
-        this.checkSafe()
     }
     async goHome() {
         for (let i = this.cell; i > 1; i--) {

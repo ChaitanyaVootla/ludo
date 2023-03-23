@@ -290,6 +290,7 @@ const updateCellsByPlayer = () => {
                 }
                 cellsMap[player][cellCount] = playerTrack
                 d3.select(`.cell.gully[cell="${playerTrack++}"]`).attr(`${player}Cell`, cellCount++)
+                d3.select(`.cell.gully[cell="${cellsMap[player][cellCount]}"]`).attr(`${player}CellMap`, cellCount - 1)
             }
             for (let count = 1; count <= 5; count++) {
                 d3.select(`.cell.finish.${player}[cell="${count}"]`).attr(`${player}Cell`, cellCount++)
